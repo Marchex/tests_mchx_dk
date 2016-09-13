@@ -1,8 +1,8 @@
-name: tests_marchefdk
-title: InSpec Profile
-maintainer: The Authors
-copyright: The Authors
-copyright_email: you@example.com
-license: All Rights Reserved
-summary: An InSpec Compliance Profile
+name: tests_mchx_dk
+title: Tests for Marchex's Chef DK
+maintainer: Tools Team
+copyright: Marchex, Inc.
+copyright_email: tools-team@marchex.com
+license: All rights reserved
+summary:
 version: 0.1.0
