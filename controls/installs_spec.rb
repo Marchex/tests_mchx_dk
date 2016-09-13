@@ -2,9 +2,8 @@ control 'mchx_dk-01' do
   impact 1.0
   title 'Verify packages installed'
 
-  if %w(debian rhel).include? os[:family]
+  if os[:family] == 'debian'
     %w(
-      curl
       vagrant
       virtualbox
     ).each do |pkg|
@@ -27,9 +26,10 @@ control 'mchx_dk-02' do
     vagrant-cachier
     inspec
   ).each do |chef_gem|
-    describe command('chef gem list -laq') do
-      its('exit_status') { should eq 0 }
+    describe command('bash -c \'if [[ -z "$(which chef 2>/dev/null)" ]]; then /opt/chef/embedded/bin/gem list -laq; else chef gem list -laq; fi\'') do
+      its('exit_status') { should == 0 }
       its('stdout') { should match (/^#{chef_gem}\b/) }
+      its('stderr') { should eq '' }
     end
   end
 end
