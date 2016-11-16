@@ -1,3 +1,9 @@
+### See if we're running under test kitchen
+KITCHEN_CHECK = command('ls /tmp/kitchen').exit_status
+describe KITCHEN_CHECK # this executes the command via ssh on the remote host being tested
+
+
+# Only run this on non-TK nodes
 control 'mchx_dk-01' do
   impact 1.0
   title 'Verify packages installed'
@@ -12,6 +18,8 @@ control 'mchx_dk-01' do
       end
     end
   end
+
+  only_if { KITCHEN_CHECK != 0 }
 end
 
 control 'mchx_dk-02' do
@@ -25,6 +33,8 @@ control 'mchx_dk-02' do
     vagrant-omnibus
     vagrant-cachier
     inspec
+    octokit
+    marchex_helpers
   ).each do |chef_gem|
     describe command("/opt/chef/embedded/bin/gem query -ln #{chef_gem}") do
       its('exit_status') { should eq 0 }
