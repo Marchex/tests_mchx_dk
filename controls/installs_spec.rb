@@ -13,18 +13,10 @@ control 'mchx_dk-01' do
       it { should be_installed }
     end
 
-    if os[:release] == '12.04'
-      describe package('virtualbox-4.3') do
-        it { should be_installed }
-      end
-    elsif os[:release] == '16.04'
-      describe package('virtualbox-5.0') do
-        it { should be_installed }
-      end
-    else
-      describe package('virtualbox') do
-        it { should be_installed }
-      end
+    virtualbox_found = command('dpkg -l virtualbox* | perl -ne \'print if s/^ii  (virtualbox(-[0-9]+\.[0-9]+)?) .*$/$1/\'').stdout.chomp
+    virtualbox_found = 'virtualbox' if virtualbox_found.length == 0
+    describe package(virtualbox_found) do
+      it { should be_installed }
     end
 
   end
